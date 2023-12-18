@@ -1,0 +1,139 @@
+package com.microservice.rating.Service.Impl;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.example.demo.exception.RatingNotFoundException;
+import com.microservice.rating.Mapper.RatingMapper;
+import com.microservice.rating.Repository.RatingRepository;
+import com.microservice.rating.Service.RatingService;
+import com.microservice.rating.dto.HotelDto;
+import com.microservice.rating.dto.RatingDto;
+import com.microservice.rating.dto.UserDto;
+import com.microservice.rating.entity.Rating;
+@Service
+public class RatingServiceImpl implements RatingService{
+	
+	@Autowired
+	private RatingRepository RatingRepo;
+	
+	@Autowired
+	private ModelMapper ratingMapper;
+	
+	@Autowired
+	private RestTemplate restTemplate;
+//
+//	@Override
+//	public Rating create(Rating rating) {
+//		// TODO Auto-generated method stub
+//		
+//		return RatingRepo.save(rating) ;
+//	}
+//
+//	@Override
+//	public List<Rating> getRatings() {
+//		// TODO Auto-generated method stub
+//		return RatingRepo.findAll();
+//	}
+//
+//	@Override
+//	public List<Rating> getRatingByUserId(String userId) {
+//		// TODO Auto-generated method stub
+//		return RatingRepo.findByUserId(userId);
+//	}
+//
+//	@Override
+//	public List<Rating> getRatingByHotelId(String hotelId) {
+//		// TODO Auto-generated method stub
+//		return RatingRepo.findByHotelId(hotelId);
+//	}
+
+	@Override
+	public RatingDto create(RatingDto ratingDto) {
+		// TODO Auto-generated method stub
+		Rating rating =ratingMapper.map(ratingDto, Rating.class);
+		Rating saveRating =RatingRepo.save(rating);
+		RatingDto addRatingDto =ratingMapper.map(saveRating, RatingDto.class);
+		return addRatingDto;
+	}
+
+	@Override
+	public RatingDto getRatingById(long id) {
+		
+		
+		//hotelDto ->set data by making a rest api call
+//		HotelDto  hotelDto =new HotelDto();
+		Rating rating =RatingRepo.findById(id).get();
+		RatingDto ratingDto =ratingMapper.map(rating, RatingDto.class);
+		
+		HotelDto hotelDto=restTemplate.getForObject("http://localhost:8085/api/hotel/{id}" ,HotelDto.class,id);//restTemplate .getForObject(url,response,uri)
+		ratingDto.setHotelDto(hotelDto);
+		
+		//getting user details along with ratings
+		UserDto userDto = restTemplate.getForObject("http://localhost:8081/api/user/{id}", UserDto.class, id);
+		ratingDto.setHotelDto(hotelDto);
+		
+		return ratingDto;
+		
+	
+  }
+	
+	@Override
+	public List<RatingDto> getAllRatings() {
+		// TODO Auto-generated method stub
+		List<Rating> rating =RatingRepo.findAll();
+		List<RatingDto> ratingDto= rating.stream().map(RatingMapper::mapToRatingDto).collect(Collectors.toList());
+		return ratingDto;
+		
+	}
+	@Override
+	public String deleteRating(long id) {
+		// TODO Auto-generated method stub
+		Optional<Rating> hotel=RatingRepo.findById(id);
+		if(hotel.isPresent()) {
+			RatingRepo.deleteById(id);
+			return "Id with" + id +"is deleted";
+		}
+		else {
+			throw new RatingNotFoundException("Rating", "id", id);
+		}
+	
+	}
+//
+//	@Override
+//	public RatingDto getRatingByUserId(long userId) {
+//		// TODO Auto-generated method stub
+//		Optional<Rating> rating = RatingRepo.findById(userId);
+//		if(rating.isPresent()) {
+//			return ratingMapper.map(rating, RatingDto.class);
+//		}
+//		else {
+//			throw new RatingNotFoundException("UserId", "userId", userId);
+//		}
+
+	
+//	}
+//
+	//@Override
+	public RatingDto getRatingByHotelId(long hotelId) {
+		Optional<Rating> rating =RatingRepo.findById(hotelId);
+		if(rating.isPresent()) {
+			return ratingMapper.map(rating, RatingDto.class);
+		}
+		else {
+			throw new RatingNotFoundException("HotelId","hotelid",hotelId);
+		}
+		
+
+	}
+	
+	
+
+	}
+

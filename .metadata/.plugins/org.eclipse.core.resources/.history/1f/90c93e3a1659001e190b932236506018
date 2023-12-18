@@ -1,0 +1,12 @@
+package com.microservice.rating.dto;
+
+
+
+public class RatingDto {
+	
+	private int ratingId;
+
+	private int rating;
+	private String feedback;
+	
+}

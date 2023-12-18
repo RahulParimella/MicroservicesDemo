@@ -1,0 +1,51 @@
+package com.microservice.rating.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+
+public class Rating {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int ratingId;
+	
+	private int rating;
+	private String feedback;
+	@Override
+	public String toString() {
+		return "Rating [ratingId=" + ratingId + ", rating=" + rating + ", feedback=" + feedback + "]";
+	}
+	public Rating() {
+		super();
+		this.ratingId = ratingId;
+		this.rating = rating;
+		this.feedback = feedback;
+	}
+	public int getRatingId() {
+		return ratingId;
+	}
+	public void setRatingId(int ratingId) {
+		this.ratingId = ratingId;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+	public String getFeedback() {
+		return feedback;
+	}
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
+	}
+
+}

@@ -1,0 +1,28 @@
+package com.microservice.rating.Mapper;
+
+import com.microservice.rating.dto.RatingDto;
+import com.microservice.rating.entity.Rating;
+
+public class RatingMapper {
+	//dto to entity
+	public static Rating mapToRating(RatingDto ratingDto) {
+		Rating rating = new Rating();
+		rating.setFeedback(rating.getFeedback());
+		rating.setRating(ratingDto.getRating());
+	
+		return rating;
+		
+	}
+	//entity to dto
+	public static RatingDto mapToRatingDto(Rating rating) {
+		RatingDto ratingDto =new RatingDto();
+		ratingDto.setFeedback(rating.getFeedback());
+		ratingDto.setHotelId(rating.getHotelId());
+		ratingDto.setRating(rating.getRating());
+		ratingDto.setUserId(rating.getUserId());
+		return ratingDto;
+		
+		
+		
+	}
+}

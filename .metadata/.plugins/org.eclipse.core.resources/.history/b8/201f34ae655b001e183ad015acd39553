@@ -1,0 +1,39 @@
+package com.microservice.rating.dto;
+
+
+
+public class RatingDto {
+	
+	private int ratingId;
+
+	private int rating;
+	private String feedback;
+	
+	private HotelDto hotelDto;
+	
+	public HotelDto getHotelDto() {
+		return hotelDto;
+	}
+	public void setHotelDto(HotelDto hotelDto) {
+		this.hotelDto = hotelDto;
+	}
+	public int getRatingId() {
+		return ratingId;
+	}
+	public void setRatingId(int ratingId) {
+		this.ratingId = ratingId;
+	}
+	public int getRating() {
+		return rating;
+	}
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+	public String getFeedback() {
+		return feedback;
+	}
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
+	}
+	
+}
